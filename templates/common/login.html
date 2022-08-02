@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "form_errors.html" %}
+{% load static %}
+<div class="container my-3 text-center">
+    <main class="form-signin">
+        <form method="post" action="{% url 'common:login' %}">
+            {% csrf_token %}
+           <input type="hidden" name="next" value="{{ next }}" >
+          <img class="mb-4" src="https://www."
+                width="100" height="100">
+
+          <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+          <div class="form-floating">
+            <input type="text" class="form-control" name="username" placeholder="ID">
+            <label for="username">Email address</label>
+          </div>
+          <div class="form-floating">
+
+            <input type="password" class="form-control"  name="password" placeholder="Password">
+            <label for="password">Password</label>
+          </div>
+
+
+          <button class="w-100 btn btn-lg btn-dark rounded-3" type="submit">Sign in</button>
+
+          <p class=" mb-3 text-muted">&copy; <bold>Since</bold> 2022</p>
+        </form>
+
+      </main>
+
+    <div class="border d-flex justify-content-end border-0">
+        아직 회원이 아니신가요?
+  <a href="{% url 'common:signup' %}">회원가입하러가기</a>
+  </div>
+</div>
+
+
+
+</div>
+
+
+
+{% endblock %}

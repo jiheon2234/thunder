@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %} abc {% endblock %}
+{% block content %}
+
+<div class="container my-3">
+    <h1><b> {{ user }}'s page</b></h1>
+
+</div>
+최근 로그인 : {{ user.last_login }}
+
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

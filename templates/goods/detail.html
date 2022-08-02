@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% block title %} 상세보기 {% endblock %}
+{% block content %}
+<div class="container my-3">
+  <div class="card my-3">
+      <h1>{{ goods.id }}번 상세보기 페이지</h1>
+       <p>name:<{{ goods.name }}</p>
+
+<p>desc=={{ goods.desc }}</p>
+<p>is_new=={{ goods.is_new }}</p>
+<p>can_change=={{ goods.can_change }}</p>
+<p>create_date=={{ goods.create_date }}</p>
+<p>update_date=={{ goods.update_date }}</p>
+<p>price=={{ goods.price }}</p>
+<p>author.username=={{ goods.author.username }}</p>
+<p>already_sell=={{ goods.already_sell }}</p>
+<p>image=={{ goods.image }}</p>
+<p>thumb_url=={{ goods.image.thumb_url }}</p>
+  </div>
+</div>
+{% if request.user == goods.author %}
+<a href="#" class="btn btn-sm btn-danger btn-outline-secondary" style="color: white">수정</a>
+<a href="{% url 'goods:delete' goods.id %}" class="btn btn-sm btn-danger btn-outline-secondary" style="color: white">삭제</a>
+
+    <div class="card my-3 m-0">
+    {% for comment in goods.comment_set.all %}
+
+      <div class="card">
+        <div class="card-text">
+          <p class="fs-4"><span class="material-icons">person </span>{{ comment.author }} <span class="material-icons fs-5"> history </span> {{ comment.create_date | date:'m/d-H:i' }}</p>
+
+          <p>{{ comment.text }}</p>
+            <a href="#">수정</a>
+
+            <a href="{% url 'goods:comment_delete' comment.id %}">삭제</a>
+        </div>
+      </div>
+
+    {% endfor %}
+  </div>
+
+<div class=" my-3 mb-0">
+      <form method="post" action="{% url 'goods:comment_create' goods.id %}" class="my-3">
+        {% csrf_token %} {% include 'form_errors.html' %}
+
+          <textarea name="text" class="form-control md-9" rows="2" {% if not user.is_authenticated %} disabled placeholder="로그인 후 이용 가능" {% else %} placeholder="댓글을 입력해주세요!" {% endif %}></textarea>
+
+
+        <input type="submit" class="btn btn-danger justify-content-end" value="등록" />
+      </form>
+    </div>
+{% endif %}
+{% endblock %}

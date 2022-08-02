@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'faviconV2.ico' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <!--header-->
+    {% include "navbar.html" %}
+
+        {% block content %}
+        <!--삽입내용-->
+        {% endblock %}
+
+        <script src="{% static 'bootstrap.min.js' %}"></script>
+        <script src="{% static 'clock.js' %}"></script>
+        <script src="{% static 'onerror.js'%}"></script>
+        {% block script %}
+
+                <!--삽입할스크립트-->
+        {% endblock %}
+
+{% include 'footer.html' %}
+</body>
+</html>
