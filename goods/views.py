@@ -10,6 +10,7 @@ class IndexLV(ListView):
     model=Goods
     template_name = 'goods/index.html'
     context_object_name = 'goods_list'
+    ordering = ['-update_date']
 
 
 def detail(request,goods_id):
@@ -18,14 +19,14 @@ def detail(request,goods_id):
     return render(request,'goods/detail.html', context)
 
 
+def mysite(request):
+    return render(request, 'goods/mysite.html')
 
 
 
 
 
-
-
-@login_required()
+@login_required(login_url='common:login')
 def goods_create(request):
     if request.method == 'POST':
         form = GoodsForm(request.POST, request.FILES['image'])
@@ -51,13 +52,18 @@ def goods_delete(request, goods_id):
     return redirect('goods:index')
 
 
+
 @login_required(login_url='common:login')
 def comment_create(request, goods_id):
     pass
     if request.method == 'POST':
         goods = get_object_or_404(Goods, pk=goods_id)
+        if request.POST.get('text')== '':
+            messages.error(request, '공백x')
+            return redirect('goods:detail',goods_id=goods_id)
         goods.comment_set.create(text=request.POST.get('text'), author=request.user)
         return redirect('goods:detail',goods_id=goods_id)
+
 
 
 def comment_delete(request,comment_id):
@@ -71,15 +77,9 @@ def comment_delete(request,comment_id):
 
 @login_required(login_url='common:login')
 def comment_modify(request, comment_id):
-    comment = get_object_or_404(Comment, pk=comment_id)
-    if request.user != comment.author:
-        messages.error(request, '수정권한이 없습니다')
-        return redirect('goods:detail',goods_id=comment.goods.id)
-    if request.method == 'POST':
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            comment.save()
-            return redirect('goods:detail', goods_id=comment.goods.id)
+    pass
+
+
 
 
 @login_required(login_url='common:login')
@@ -107,7 +107,7 @@ def modify(request, goods_id):
 
 
 def index(request):
-    goods_list = Goods.objects.all()
-    context = {'goods_list': goods_list}
+    goods_list = Goods.objects.order_by('-create_date')
+    cotext={'goods_list': goods_list}
+    return render(request, 'goods:index.html', context=cotext)
 
-    return render(request, 'goods/index.html', context)

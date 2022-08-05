@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block title %} mysite {% endblock %}
+{% block content %}
+{% load humanize %}
+{% load static %}
+<h1>{{ request.user }}의 페이지 </h1>
+<div class="container" style="padding-right:200px; padding-left:200px;">
+
+{{ request.user.goods_set.all }}
+<br>
+{% for goods in request.user.goods_set.all  %}
+
+<a href="{% url 'goods:detail' goods.id %}">
+<img src="{{ goods.image.thumb_url }}" alt="바로가기">
+</a>
+
+{% endfor %}
+</div>
+{% endblock %}

@@ -6,7 +6,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.IndexLV.as_view(),name='index'),
+    path('', views.IndexLV.as_view(), name='index'),
     path('goods/', include('goods.urls')),
     path('common/', include('common.urls')),
 

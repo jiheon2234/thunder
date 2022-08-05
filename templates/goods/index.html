@@ -1,20 +1,40 @@
-{% extends 'base.html' %} {% block title %} 글 상세보기 {% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} 리스트뷰{% endblock %}
+{% block content %}
 
-<div class="container">
-    <h1>리스트뷰 </h1><h2 ><a href="{% url 'goods:create' %}">새 글 쓰기</a></h2>
+{% load static %}
+{% load humanize %}
+<h6> </h6>
+
+
+<div class="container" style="padding-right:200px; padding-left:200px;">
+<img src="{% static 'goods/thunderadd.png' %}" class="card-img-top">
+ <div class="row">
+     {% if goods_list %}
 {% for goods in goods_list %}
 
-<div class="card" style="width: 12rem;">
-    <a href="{% url 'goods:detail' goods.id %}">
-  <img src="{{ goods.image.thumb_url }}" class="card-img-top" alt="...">
-    </a>
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+<div class="col-md-3 my-2">
+<div class="card " style="width: 11rem; height:18rem">
+    <a class = "mx-0"href="{% url 'goods:detail' goods.id %}" style="text-decoration:none;color:black;">
+  <img src="{{ goods.image.thumb_url }}" class="card-img-top " alt="...">
+
+  <div class="card-body text-dark" style="height:10rem;">
+      <p class="card-text">{{ goods.name }}</p>
+    <h5 class="card-title inline">{{ goods.price | intcomma }}원</h5>
+    <p class="card-text">{{ goods.tts }}
+        {% if goods.comment_set.count > 0 %}
+        <span class="text-danger">댓글:{{ goods.comment_set.count }}</span>
+        {% endif %}
+    </p>
+
+
+
   </div>
+         </a>
+</div>
 </div>
 
 {% endfor %}
+    {% endif %}
+     </div>
        </div>
 {% endblock %}

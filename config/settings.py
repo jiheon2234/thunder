@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'goods.apps.GoodsConfig',
+    'django.contrib.humanize',
 
 ]
 

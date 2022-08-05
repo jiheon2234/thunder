@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% block title %} 생성 {% endblock %}
 {% block content %}
-<div class="container">
-    <h1 class="text-center">글쓰기</h1>
-    <form id="submitform" method="post" enctype="multipart/form-data">
+<div class="container " style="padding-right:200px; padding-left:200px;">
+    <h1 class="text-center">상품등록</h1>
+    <form id="submitform"  method="post" enctype="multipart/form-data">
 
         {% csrf_token %}
         <!-- 오류표시 Start -->
         {% include "form_errors.html" %}
         <!-- 오류표시 End -->
 
-            <label for="is_new" class="form-label " >어디?</label>
-             <span  class="fs-6"></span>
-            <input type="file"   name="image" accept="image/" class="form-control">
+            <label for="is_new" class="form-label " ></label>
+             <span  class="fs-7" >이미지를 입력해 주세요 자동으로 크기 변환됨</span>
+            <input type="file"   name="image" accept="image/" class="form-control ">
 
         <div id="ti" class="mb-3 fs-2">
             <label for="name" class="form-label " >상품명</label> <span  class="fs-6
@@ -53,4 +53,5 @@
             </div>
         </p>
     </form>
+    </div>
     {% endblock %}

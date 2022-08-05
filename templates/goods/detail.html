@@ -1,38 +1,104 @@
 {% extends 'base.html' %} {% block title %} 상세보기 {% endblock %}
 {% block content %}
-<div class="container my-3">
-  <div class="card my-3">
-      <h1>{{ goods.id }}번 상세보기 페이지</h1>
-       <p>name:<{{ goods.name }}</p>
-
-<p>desc=={{ goods.desc }}</p>
-<p>is_new=={{ goods.is_new }}</p>
-<p>can_change=={{ goods.can_change }}</p>
-<p>create_date=={{ goods.create_date }}</p>
-<p>update_date=={{ goods.update_date }}</p>
-<p>price=={{ goods.price }}</p>
-<p>author.username=={{ goods.author.username }}</p>
-<p>already_sell=={{ goods.already_sell }}</p>
-<p>image=={{ goods.image }}</p>
-<p>thumb_url=={{ goods.image.thumb_url }}</p>
+{% load humanize %}
+{% load static %}
+ {% if messages %}
+  <div class="alert alert-danger my-3" role="alert">
+    {% for message in messages %}
+    <strong>{{ message.tags }}</strong>
+    <ul>
+      <li>{{ message.message }}</li>
+    </ul>
+    {% endfor %}
   </div>
-</div>
-{% if request.user == goods.author %}
-<a href="#" class="btn btn-sm btn-danger btn-outline-secondary" style="color: white">수정</a>
-<a href="{% url 'goods:delete' goods.id %}" class="btn btn-sm btn-danger btn-outline-secondary" style="color: white">삭제</a>
+{% endif %}
+<div class="container" style="padding-right:200px; padding-left:200px;">
+    <div class="card m-2" >
+        <div class="row">
+            <div class="col-md-4">
+<!--                <img class="m-2"  src="/media/{{ goods.image }}" width="110%">-->
+                <img class="m-2" src="{{ goods.image.thumb_url }}" width="250px" height="300px">
+            </div>
+
+            <div class="col-md-6 mx-5">
+                <div class="col">
+                    <div class="col-md-6 ts-1 "> <h3>{{ goods.name }}</h3></div>
+                    <p></p>
+                    <div class="border-bottom "><h1 class="inline">{{ goods.price | intcomma }}원</h1></div>
+                    <img src="{% static 'goods/thunderpoint.png' %}" class="card-img-top" width="216px" height="30px">
+                    <div class="col-md-12 ">
+                        <ul style="list-style-color:green;">
+                        <li class="my-2"><span style="color:#cccccc;">상품상태</span> {% if goods.is_new %} 새상품 {% else %} 헌상품 {% endif %}</li>
+                        <li class="my-2"><span style="color:#cccccc;">교환여부</span> {% if goods.can_change %} 교환가능 {% else %} 교환불가능 {% endif %}</li>
+                        <li class="my-2"><span style="color:#cccccc;">배송비</span> 배송비포함 </li>
+                        <li class="my-2"><span style="color:#cccccc;">거래지역</span> {{ goods.where }}</li>
+                    </ul>
+                        <div class="col">
+                            <button  class="btn btn-lg btn-secondary col-3" style="opacity:0.5;"><span style="font-size:20px;">🤍찜0</span></button>
+                            <button  class="btn btn-lg btn-warning col-4" style="opacity:0.9;"><span style="font-size:20px;">연락하기</span></button>
+                            <button  class="btn btn-lg btn-danger col-4" ><span style="font-size:20px;">바로구매</span></button>
+
+                                                   {% if request.user == goods.author %}
+
+<a href="#" class="btn btn-sm btn-danger btn-outline-secondary " style="color: white">수정</a>
+<a href="{% url 'goods:delete' goods.id %}" class="btn btn-sm btn-danger btn-outline-secondary " style="color: white">삭제</a>
+                            <span class="fs-7 " >유저일경우에만보임</span>
+
+{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card m-2">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="col">
+                    <div class="border-bottom">상품정보</div>
+                    <div class="col-md-12">
+                        {{ goods.desc  | linebreaksbr }}
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="border-bottom">상점정보</div>
+                <div class="row">
+                     <div class="col-md-1"><span class="material-icons">person </span></div>
+                    <div class="col-md-8 ">
+                        <p class="font-weight-bold">{{ goods.author }}</p>
+                        <p class="text-secondary">상품{{ goods.author.goods_set.count }} | 팔로워??</p>
+                        {% for x in goods.author.goods_set.all %}
+                        <a href="{% url 'goods:detail' x.id %}" style="color:red; text-decoration:none;">{{ x.name }}</a>
+                        {% endfor %}
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 
     <div class="card my-3 m-0">
     {% for comment in goods.comment_set.all %}
 
       <div class="card">
         <div class="card-text">
-          <p class="fs-4"><span class="material-icons">person </span>{{ comment.author }} <span class="material-icons fs-5"> history </span> {{ comment.create_date | date:'m/d-H:i' }}</p>
+          <p class="fs-4"><span class="material-icons">person </span>{{ comment.author }} <span class="material-icons fs-5"> history </span> {{ comment.tts }}</p>
 
           <p>{{ comment.text }}</p>
-            <a href="#">수정</a>
+            <p>
+          <a href="#" class="btn btn-sm btn-danger btn-outline-secondary " style="color: white">수정</a>
 
-            <a href="{% url 'goods:comment_delete' comment.id %}">삭제</a>
-        </div>
+            <a class="btn btn-sm btn-danger btn-outline-secondary "  style="color: white" href="{% url 'goods:comment_delete' comment.id %}">삭제</a>
+        </p>
+            </div>
       </div>
 
     {% endfor %}
@@ -48,5 +114,12 @@
         <input type="submit" class="btn btn-danger justify-content-end" value="등록" />
       </form>
     </div>
-{% endif %}
+</div>
+</div>
+
+
+
+
+
+
 {% endblock %}
